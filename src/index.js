@@ -1,9 +1,15 @@
+import Router from 'preact-router';
+import { h } from 'preact';
+
+import Home from './home.js';
+import Paste from './paste.js';
 import './style';
 
 export default function App() {
-	return (
-		<div>
-			<h1>paste-server</h1>
-		</div>
-	);
+    return (
+        <Router>
+            <Home path="/" />
+            <Paste path="/:uuid" />
+        </Router>
+    );
 }
