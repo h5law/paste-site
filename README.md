@@ -4,6 +4,8 @@ This is a simple Preact frontend for the [paste-server](https://github.com/h5law
 
 ## Install
 
+This requires Node v16.16.0+
+
 To install simply clone this repo and install the npm dependencies:
 ```
 git clone https://github.com/h5law/paste-site
@@ -21,7 +23,7 @@ instance it is made for, and will use the `window.location.origin` value for
 making API calls which wont work unless the paste-instance server is both
 running AND on the same port.
 
-## Build and Serve
+## Build
 
 To build this yourself simply run:
 ```
