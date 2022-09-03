@@ -280,7 +280,7 @@ export default function Home() {
             }
             setResp(response);
         } catch (err) {
-            setResp({ error: err });
+            console.log(err);
         }
     }
 

@@ -99,7 +99,7 @@ export default function Paste(props) {
             }
             setResp(response);
         } catch (err) {
-           setResp({ error: err });
+            console.log(err);
         }
     }
 
