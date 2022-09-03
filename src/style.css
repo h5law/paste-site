@@ -31,3 +31,7 @@ h1 {
 #code {
     font-family: "Source Code Pro", monospace;
 }
+
+#error-container {
+    font-size: 1.1rem;
+}
