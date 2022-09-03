@@ -89,8 +89,6 @@ function CreateButton(props) {
         }
     }
 
-    console.log(props.co)
-
     return (
         <div id="create-container">
             <button id="create-button"
@@ -255,7 +253,7 @@ export default function Home() {
         if (process.env.NODE_ENV === "development") {
             url = "http://127.0.0.1:3000"
         } else {
-            url = window.location.href;
+            url = window.location.origin;
         }
         try {
             const response = await createPaste(url, content, filetype, expiresIn);
