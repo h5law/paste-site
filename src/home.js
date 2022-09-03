@@ -199,10 +199,13 @@ export default function Home() {
 
     async function newPaste() {
         try {
-            // TODO change to proper URL detection with window.location.href
-            const response = await createPaste(
-                "http://127.0.0.1:3000/", content, filetype, expiresIn
-            );
+            let url;
+            if (process.env.NODE_ENV === "development") {
+                url = "http://127.0.0.1:3000"
+            } else {
+                url = window.location.href;
+            }
+            const response = await createPaste(url, content, filetype, expiresIn);
             if (response == undefined) {
                 const text = await response.text();
                 setError({
