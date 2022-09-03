@@ -6,7 +6,7 @@ export async function createPaste(url, content, filetype, expiresIn) {
             body: JSON.stringify({
                 "content": content,
                 "filetype": filetype,
-                "expiresIn": expiresIn,
+                "expiresIn": Number(expiresIn),
             }),
             headers: {
                 "Content-Type": "application/json",
