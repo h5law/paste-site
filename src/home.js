@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { useState, useRef } from 'preact/hooks';
 
 import { createPaste } from './api.js'
 
@@ -100,28 +100,9 @@ function PasteCode(props) {
     const codeAreaRef = useRef();
     const [content, setContent] = useState("");
 
-    const [screenSize, getDimension] = useState({
-        dWidth:     document.body.offsetWidth,
-        dHeight:    document.documentElement.clientHeight,
-    });
-    const setDimension = () => {
-        getDimension({
-            dWidth:     document.body.offsetWidth,
-            dHeight:    document.documentElement.clientHeight,
-        });
-    };
-
-    useEffect(() => {
-        window.addEventListener('resize', setDimension);
-
-        return (() => {
-            window.removeEventListener('resize', setDimension);
-        });
-    }, [screenSize]);
-
     const textAreaStyle = {
-        width: `${screenSize.dWidth - 40}px`,
-        maxHeight: `${screenSize.dHeight}px`,
+        width: `99%`,
+        maxHeight: `99%`,
     };
 
     function handleChange(e) {

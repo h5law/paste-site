@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 import { getPaste } from './api.js';
 
@@ -7,28 +7,9 @@ function Content({ resp }) {
     const [ft, setFt] = useState(resp.filetype);
     const [ea, setEa] = useState(resp.expiresAt);
 
-    const [screenSize, getDimension] = useState({
-        dWidth:     document.body.offsetWidth,
-        dHeight:    document.documentElement.clientHeight,
-    });
-    const setDimension = () => {
-        getDimension({
-            dWidth:     document.body.offsetWidth,
-            dHeight:    document.documentElement.clientHeight,
-        });
-    };
-
-    useEffect(() => {
-        window.addEventListener('resize', setDimension);
-
-        return (() => {
-            window.removeEventListener('resize', setDimension);
-        });
-    }, [screenSize]);
-
     const textAreaStyle = {
-        width: `${screenSize.dWidth - 40}px`,
-        maxHeight: `${screenSize.dHeight}px`,
+        width: `99%`,
+        maxHeight: `99%`,
     };
 
     const languageStr = `language-${ft}`;
