@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 
 const mapLangName = new Map([
     ["bash", "Bash"],
@@ -72,6 +72,9 @@ function ExpiresIn(props) {
             <label for="ei-number">Expires In: </label>
             <input type="range" id="ei-number" name="expires-in"
                    min="1" max="30" value={props.ei} onChange={handleChange} />
+            <p><span id="days-label">
+                {props.ei} day{props.ei > 1 ? "s" : ""}
+            </span></p>
         </div>
     );
 }
@@ -92,6 +95,9 @@ function CreateButton(props) {
 }
 
 function PasteCode(props) {
+    const codeAreaRef = useRef();
+    const [content, setContent] = useState("");
+
     const [screenSize, getDimension] = useState({
         dWidth:     document.body.offsetWidth,
         dHeight:    document.documentElement.clientHeight,
@@ -112,13 +118,61 @@ function PasteCode(props) {
     }, [screenSize]);
 
     const textAreaStyle = {
-        maxWidth: `${screenSize.dWidth - 10}px`,
+        width: `${screenSize.dWidth - 40}px`,
         maxHeight: `${screenSize.dHeight}px`,
     };
 
     function handleChange(e) {
-        e.preventDefault();
+        setContent(e.target.value);
         props.sc(e.target.value.split('\n'));
+    }
+
+    function handleTab(e) {
+        // indent 4 spaces
+        if (e.key === 'Tab' && !e.shiftKey) {
+            e.preventDefault();
+            const value = codeAreaRef.current.value;
+            const selectionStart = codeAreaRef.current.selectionStart;
+            const selectionEnd = codeAreaRef.current.selectionEnd;
+            codeAreaRef.current.value =
+                value.substring(0, selectionStart) + "    " + value.substring(selectionEnd);
+                codeAreaRef.current.selectionStart = selectionEnd + 4 - (selectionEnd - selectionStart);
+                codeAreaRef.current.selectionEnd = selectionEnd + 4 - (selectionEnd - selectionStart);
+        }
+
+        // indent backwards
+        if (e.key === 'Tab' && e.shiftKey) {
+            e.preventDefault();
+            const value = codeAreaRef.current.value;
+            const selectionStart = codeAreaRef.current.selectionStart;
+            const selectionEnd = codeAreaRef.current.selectionEnd;
+
+            const beforeStart = value
+                .substring(0, selectionStart)
+                .split('')
+                .reverse()
+                .join('');
+            const indexOfTab = beforeStart.indexOf("    ");
+            const indexOfNewline = beforeStart.indexOf('\n');
+
+            if (indexOfTab !== -1 && indexOfTab < indexOfNewline) {
+                codeAreaRef.current.value =
+                    beforeStart
+                        .substring(indexOfTab + 4)
+                        .split('')
+                        .reverse()
+                        .join('') +
+                    beforeStart
+                        .substring(0, indexOfTab)
+                        .split('')
+                        .reverse()
+                        .join('') +
+                    value.substring(selectionEnd);
+
+                codeAreaRef.current.selectionStart = selectionStart - 4;
+                codeAreaRef.current.selectionEnd = selectionEnd - 4;
+            }
+        }
     }
 
     const languageStr = `language-${props.ft}`;
@@ -126,9 +180,9 @@ function PasteCode(props) {
     return (
         <pre id="code-container">
             <code class={languageStr}>
-                <textarea id="code" name="paste-code" autofocus
-                          style={textAreaStyle} rows="30" cols="100"
-                          onChange={handleChange}>
+                <textarea id="code" name="paste-code" autofocus rows="30"
+                          style={textAreaStyle} ref={codeAreaRef}
+                          onChange={handleChange} onKeyDown={handleTab}>
                 </textarea>
             </code>
         </pre>
@@ -141,12 +195,13 @@ export default function Home() {
     const [content, setContent] = useState([]);
 
     return (
-        <div id="container">
-            <FtSelector sft={setFiletype} />
-            <ExpiresIn ei={expiresIn} sei={setExpiresIn} />
-            <p>{expiresIn} day{expiresIn > 1 ? "s" : ""}</p>
-            <CreateButton />
-            <PasteCode ft={filetype} sc={setContent} />
+        <div>
+            <div id="button-container">
+                <FtSelector sft={setFiletype} />
+                <ExpiresIn ei={expiresIn} sei={setExpiresIn} />
+                <CreateButton />
+            </div>
+            <PasteCode ft={filetype} co={content} sc={setContent} />
         </div>
     );
 }
