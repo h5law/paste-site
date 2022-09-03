@@ -35,3 +35,28 @@ h1 {
 #error-container {
     font-size: 1.1rem;
 }
+
+#success-container {
+    font-size: 1.1rem;
+}
+
+ul {
+    margin: auto;
+    padding: 0;
+    min-width: 350px;
+    max-width: 50%;
+    list-style: none;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+}
+
+.response-key {
+    text-align: left;
+}
+
+.response-value {
+    text-align: right;
+}

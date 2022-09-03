@@ -191,11 +191,74 @@ function PasteCode(props) {
     );
 }
 
+function ResponseText({ resp }) {
+    if (resp.statusCode !== undefined) {
+        return (
+            <ul id="error-container">
+                <li class="success-response">
+                    <span class="response-key">
+                    Status Code:
+                    </span>
+                    <span class="response-value">
+                    {resp.statusCode}
+                    </span>
+                </li>
+                <li class="success-response">
+                    <span class="response-key">
+                    Status Text:
+                    </span>
+                    <span class="response-value">
+                    {resp.statusText}
+                    </span>
+                </li>
+                <li class="success-response">
+                    <span class="response-key">
+                    Error Message:
+                    </span>
+                    <span class="response-value">
+                    {resp.payload}
+                    </span>
+                </li>
+            </ul>
+        );
+    } else if (Object.keys(resp).length > 0){
+        return (
+            <ul id="success-container">
+                <li class="success-response">
+                    <span class="response-key">
+                    UUID:
+                    </span>
+                    <span class="response-value">
+                    <a href={window.location.href+resp.uuid}>{resp.uuid}</a>
+                    &nbsp;<a href={window.location.href+resp.uuid+"/raw"}>(raw)</a>
+                    </span>
+                </li>
+                <li class="success-response">
+                    <span class="response-key">
+                    Access Key:
+                    </span>
+                    <span class="response-value">
+                    {resp.accessKey}
+                    </span>
+                </li>
+                <li class="success-response">
+                    <span class="response-key">
+                    Expires At:
+                    </span>
+                    <span class="response-value">
+                    {resp.expiresAt}
+                    </span>
+                </li>
+            </ul>
+        );
+    }
+}
+
 export default function Home() {
     const [filetype, setFiletype] = useState("plaintext");
     const [expiresIn, setExpiresIn] = useState(14);
     const [content, setContent] = useState([]);
-    const [error, setError] = useState({});
+    const [resp, setResp] = useState({});
 
     async function newPaste() {
         try {
@@ -208,14 +271,14 @@ export default function Home() {
             const response = await createPaste(url, content, filetype, expiresIn);
             if (response == undefined) {
                 const text = await response.text();
-                setError({
+                setResp({
                     statusCode: response.status,
                     statusText: response.statusText,
                     payload: text,
                 });
                 return
             }
-            setError(response);
+            setResp(response);
         } catch (err) {
             setError(err);
         }
@@ -229,11 +292,7 @@ export default function Home() {
                 <CreateButton np={newPaste} />
             </div>
             <PasteCode ft={filetype} co={content} sc={setContent} />
-            <div id="error-container">
-                <p><span id="error-message">
-                    {Object.keys(error).map(k => <p>{k}: {error[k]}</p>)}
-                </span></p>
-            </div>
+            <ResponseText resp={resp} />
         </div>
     );
 }
