@@ -1,8 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
 html, body {
-	font: 14px/1.21 'Helvetica Neue', arial, sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 14px;
 	font-weight: 400;
+}
+
+body {
+    margin: 0;
+    padding: 15px;
 }
 
 h1 {
 	text-align: center;
+}
+
+#button-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#ei-number-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#code {
+    font-family: "Source Code Pro", monospace;
 }
