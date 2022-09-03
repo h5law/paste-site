@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 
+import { createPaste } from './api.js'
+
 const mapLangName = new Map([
     ["bash", "Bash"],
     ["c", "C"],
@@ -80,14 +82,14 @@ function ExpiresIn(props) {
 }
 
 function CreateButton(props) {
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
-        props.cp()
+        await props.np()
     }
 
     return (
         <div id="create-container">
-            <button id="create-button" onSubmit={handleSubmit}>
+            <button id="create-button" onClick={handleSubmit}>
                 Create Paste
             </button>
         </div>
@@ -193,15 +195,42 @@ export default function Home() {
     const [filetype, setFiletype] = useState("plaintext");
     const [expiresIn, setExpiresIn] = useState(14);
     const [content, setContent] = useState([]);
+    const [error, setError] = useState({});
+
+    async function newPaste() {
+        try {
+            // TODO change to proper URL detection with window.location.href
+            const response = await createPaste(
+                "http://127.0.0.1:3000/", content, filetype, expiresIn
+            );
+            if (response == undefined) {
+                const text = await response.text();
+                setError({
+                    statusCode: response.status,
+                    statusText: response.statusText,
+                    payload: text,
+                });
+                return
+            }
+            setError(response);
+        } catch (err) {
+            setError(err);
+        }
+    }
 
     return (
         <div>
             <div id="button-container">
                 <FtSelector sft={setFiletype} />
                 <ExpiresIn ei={expiresIn} sei={setExpiresIn} />
-                <CreateButton />
+                <CreateButton np={newPaste} />
             </div>
             <PasteCode ft={filetype} co={content} sc={setContent} />
+            <div id="error-container">
+                <p><span id="error-message">
+                    {Object.keys(error).map(k => <p>{k}: {error[k]}</p>)}
+                </span></p>
+            </div>
         </div>
     );
 }
