@@ -84,12 +84,17 @@ function ExpiresIn(props) {
 function CreateButton(props) {
     async function handleSubmit(e) {
         e.preventDefault()
-        await props.np()
+        if (props.co.length > 0) {
+            await props.np()
+        }
     }
+
+    console.log(props.co)
 
     return (
         <div id="create-container">
-            <button id="create-button" onClick={handleSubmit}>
+            <button id="create-button"
+                disabled={props.co.length < 1} onClick={handleSubmit}>
                 Create Paste
             </button>
         </div>
@@ -106,8 +111,12 @@ function PasteCode(props) {
     };
 
     function handleChange(e) {
+        if (e.target.value !== "") {
+            props.sc(e.target.value.split('\n'));
+        } else {
+            props.sc([])
+        }
         setContent(e.target.value);
-        props.sc(e.target.value.split('\n'));
     }
 
     function handleTab(e) {
@@ -270,7 +279,7 @@ export default function Home() {
             <div id="button-container">
                 <FtSelector sft={setFiletype} />
                 <ExpiresIn ei={expiresIn} sei={setExpiresIn} />
-                <CreateButton np={newPaste} />
+                <CreateButton co={content} np={newPaste} />
             </div>
             <PasteCode ft={filetype} co={content} sc={setContent} />
             <ResponseText resp={resp} />
