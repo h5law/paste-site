@@ -65,7 +65,7 @@ export default function Paste(props) {
         if (process.env.NODE_ENV === "development") {
             url = "http://127.0.0.1:3000"
         } else {
-            url = window.location.href;
+            url = window.location.origin;
         }
         try {
             const response = await getPaste(url, props.uuid);
@@ -90,8 +90,10 @@ export default function Paste(props) {
 
     return (
         <div>
-            { resp.content === undefined ? <ErrorMessage resp={resp} /> : "" }
-            { resp.content !== undefined ? <Content resp={resp} /> : "" }
+            { resp.content === undefined
+                ? <ErrorMessage resp={resp} />
+                : <Content resp={resp} />
+            }
         </div>
     );
 }
