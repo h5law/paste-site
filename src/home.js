@@ -195,7 +195,7 @@ function ResponseText({ resp }) {
     if (resp.statusCode !== undefined) {
         return (
             <ul id="error-container">
-                <li class="success-response">
+                <li class="error-response">
                     <span class="response-key">
                     Status Code:
                     </span>
@@ -203,7 +203,7 @@ function ResponseText({ resp }) {
                     {resp.statusCode}
                     </span>
                 </li>
-                <li class="success-response">
+                <li class="error-response">
                     <span class="response-key">
                     Status Text:
                     </span>
@@ -211,7 +211,7 @@ function ResponseText({ resp }) {
                     {resp.statusText}
                     </span>
                 </li>
-                <li class="success-response">
+                <li class="error-response">
                     <span class="response-key">
                     Error Message:
                     </span>
@@ -261,15 +261,15 @@ export default function Home() {
     const [resp, setResp] = useState({});
 
     async function newPaste() {
+        let url;
+        if (process.env.NODE_ENV === "development") {
+            url = "http://127.0.0.1:3000"
+        } else {
+            url = window.location.href;
+        }
         try {
-            let url;
-            if (process.env.NODE_ENV === "development") {
-                url = "http://127.0.0.1:3000"
-            } else {
-                url = window.location.href;
-            }
             const response = await createPaste(url, content, filetype, expiresIn);
-            if (response == undefined) {
+            if (response.accessKey === undefined) {
                 const text = await response.text();
                 setResp({
                     statusCode: response.status,
@@ -280,7 +280,7 @@ export default function Home() {
             }
             setResp(response);
         } catch (err) {
-            setError(err);
+            setResp({ error: err });
         }
     }
 
