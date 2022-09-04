@@ -30,6 +30,7 @@ h1 {
 
 #code {
     font-family: "Source Code Pro", monospace;
+    color: black;
 }
 
 #error-container {
@@ -59,4 +60,19 @@ li {
 
 .response-value {
     text-align: right;
+}
+
+#paste-meta-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meta-wrapper {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+#error-wrapper {
+    margin-top: 2rem;
 }
