@@ -1,45 +1,7 @@
 import { useState, useRef } from 'preact/hooks';
 
 import { createPaste } from './api.js'
-
-const mapLangName = new Map([
-    ["bash", "Bash"],
-    ["c", "C"],
-    ["cpp", "C++"],
-    ["csharp", "C#"],
-    ["css", "CSS"],
-    ["diff", "Diff"],
-    ["go", "Go"],
-    ["graphql", "GraphQL"],
-    ["ini", "INI"],
-    ["java", "Java"],
-    ["javascript", "JavaScript"],
-    ["json", "JSON"],
-    ["kotlin", "Kotlin"],
-    ["less", "Less"],
-    ["lua", "Lua"],
-    ["makefile", "Makefile"],
-    ["markdown", "Markdown"],
-    ["objectivec", "Objective-C"],
-    ["perl", "Perl"],
-    ["php", "PHP"],
-    ["php-template", "PHP Template"],
-    ["plaintext", "Plaintext"],
-    ["python", "Python"],
-    ["python-repl", "Python REPL"],
-    ["r", "R"],
-    ["ruby", "Ruby"],
-    ["rust", "Rust"],
-    ["scss", "SCSS"],
-    ["shell", "Shell"],
-    ["sql", "SQL"],
-    ["swift", "Swift"],
-    ["typescript", "TypeScript"],
-    ["wasm", "WebAssembly"],
-    ["xml", "XML"],
-    ["yaml", "YAML"],
-    ["vbnet", ".NET"],
-]);
+import { mapLangName } from './utils.js'
 
 function FtSelector(props) {
     function handleChange(e) {
