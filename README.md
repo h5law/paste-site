@@ -30,7 +30,13 @@ To build this yourself simply run:
 npm run build
 ```
 
+And have your [paste-server](https://github.com/h5law/paste-server) instance
+point to the build directory when starting it using the `--spa-dir` flag:
+```
+paste-server start -v --spa-dir="./build"
+```
+
 ## TODO
 
-- Add update & delete support
 - Make look and feel better
+- Add syntax highlighting with highlight.js
