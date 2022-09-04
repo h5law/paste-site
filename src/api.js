@@ -35,3 +35,52 @@ export async function getPaste(url, uuid) {
         throw err;
     }
 }
+
+export async function updatePaste(url, uuid, content, filetype, expiresIn, accessKey) {
+    const endpoint = url.replace(/\/$/, '') + "/api/" + uuid;
+    const bodyObj = {};
+    if (content !== null) {
+        bodyObj["content"] = content;
+    }
+    if (filetype !== null) {
+        bodyObj["filetype"] = filetype;
+    }
+    try {
+        const response = await fetch(endpoint, {
+            method: "PUT",
+            body: JSON.stringify({
+                ...bodyObj,
+                "expiresIn": Number(expiresIn),
+                "accessKey": accessKey,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            return jsonResponse
+        }
+        return response
+    } catch (err) {
+        throw err
+    }
+}
+
+export async function deletePaste(url, uuid, accessKey) {
+    const endpoint = url.replace(/\/$/, '') + "/api/" + uuid;
+    try {
+        const response = await fetch(endpoint, {
+            method: "DELETE",
+            body: JSON.stringify({
+                "accessKey": accessKey,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response
+    } catch (err) {
+        throw err
+    }
+}
