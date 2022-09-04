@@ -26,6 +26,9 @@ function Content({ resp }) {
 }
 
 function ErrorMessage({ resp }) {
+    if (Object.keys(resp).length < 1) {
+        return
+    }
     return (
         <ul id="error-container">
             <li class="error-response">
