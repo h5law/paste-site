@@ -1,7 +1,7 @@
 import { useState, useRef } from 'preact/hooks';
 
-import { createPaste } from './api.js'
-import { mapLangName } from './utils.js'
+import { createPaste } from '../api.js'
+import { mapLangName } from '../utils.js'
 
 function FtSelector(props) {
     function handleChange(e) {

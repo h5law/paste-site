@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 
-import { getPaste, updatePaste, deletePaste } from './api.js';
-import { mapLangName } from './utils.js'
+import { getPaste, updatePaste, deletePaste } from '../api.js';
+import { mapLangName } from '../utils.js'
 
 function EditOptions(props) {
     function handleSelChange(e) {
