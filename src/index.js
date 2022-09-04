@@ -9,8 +9,8 @@ export default function App() {
     return (
         <div id="app">
             <Router>
-                <Home path="/" />
                 <Paste path="/:uuid" />
+                <Home default />
             </Router>
         </div>
     );
