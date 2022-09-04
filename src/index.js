@@ -8,8 +8,8 @@ import './style';
 export default function App() {
     return (
         <Router>
-            <Home path="/" />
             <Paste path="/:uuid" />
+            <Home path="/" default />
         </Router>
     );
 }
