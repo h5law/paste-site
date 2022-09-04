@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 
 import { getPaste, updatePaste, deletePaste } from './api.js';
 import { mapLangName } from './utils.js'
@@ -99,10 +99,70 @@ function PasteMeta(props) {
 }
 
 function Content(props) {
+    const codeAreaRef = useRef();
+    const [content, setContent] = useState("");
+
     const textAreaStyle = {
         width: `99%`,
         maxHeight: `99%`,
     };
+
+    function handleChange(e) {
+        if (e.target.value !== "") {
+            props.sc(e.target.value.split('\n'));
+        } else {
+            props.sc([])
+        }
+        setContent(e.target.value);
+    }
+
+    function handleTab(e) {
+        // indent 4 spaces
+        if (e.key === 'Tab' && !e.shiftKey) {
+            e.preventDefault();
+            const value = codeAreaRef.current.value;
+            const selectionStart = codeAreaRef.current.selectionStart;
+            const selectionEnd = codeAreaRef.current.selectionEnd;
+            codeAreaRef.current.value =
+                value.substring(0, selectionStart) + "    " + value.substring(selectionEnd);
+                codeAreaRef.current.selectionStart = selectionEnd + 4 - (selectionEnd - selectionStart);
+                codeAreaRef.current.selectionEnd = selectionEnd + 4 - (selectionEnd - selectionStart);
+        }
+
+        // indent backwards
+        if (e.key === 'Tab' && e.shiftKey) {
+            e.preventDefault();
+            const value = codeAreaRef.current.value;
+            const selectionStart = codeAreaRef.current.selectionStart;
+            const selectionEnd = codeAreaRef.current.selectionEnd;
+
+            const beforeStart = value
+                .substring(0, selectionStart)
+                .split('')
+                .reverse()
+                .join('');
+            const indexOfTab = beforeStart.indexOf("    ");
+            const indexOfNewline = beforeStart.indexOf('\n');
+
+            if (indexOfTab !== -1 && indexOfTab < indexOfNewline) {
+                codeAreaRef.current.value =
+                    beforeStart
+                        .substring(indexOfTab + 4)
+                        .split('')
+                        .reverse()
+                        .join('') +
+                    beforeStart
+                        .substring(0, indexOfTab)
+                        .split('')
+                        .reverse()
+                        .join('') +
+                    value.substring(selectionEnd);
+
+                codeAreaRef.current.selectionStart = selectionStart - 4;
+                codeAreaRef.current.selectionEnd = selectionEnd - 4;
+            }
+        }
+    }
 
     const languageStr = `language-${props.ft}`;
 
@@ -114,9 +174,10 @@ function Content(props) {
     return (
         <pre id="code-container">
             <code class={languageStr}>
-                <textarea id="code" name="paste-code" disabled={!props.es} rows="30"
+                <textarea id="code" name="paste-code" disabled={!props.es}
                           style={textAreaStyle} value={props.co.join("\n")}
-                          onChange={handleChange}>
+                          ref={codeAreaRef} rows="30"
+                          onChange={handleChange} onKeyDown={handleTab}>
                 </textarea>
             </code>
         </pre>
@@ -243,7 +304,7 @@ export default function Paste(props) {
             }
             try {
                 const response = await deletePaste(url, props.uuid, accessKey);
-                if (response.status) {
+                if (response.status !== 204) {
                     const text = await response.text();
                     setErr({
                         statusCode: response.status,
