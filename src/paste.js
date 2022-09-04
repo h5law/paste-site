@@ -243,7 +243,7 @@ export default function Paste(props) {
             }
             try {
                 const response = await deletePaste(url, props.uuid, accessKey);
-                if (response === undefined) {
+                if (response.status) {
                     const text = await response.text();
                     setErr({
                         statusCode: response.status,
