@@ -7,9 +7,11 @@ import './style';
 
 export default function App() {
     return (
-        <Router>
-            <Paste path="/:uuid" />
-            <Home path="/" default />
-        </Router>
+        <div id="app">
+            <Router>
+                <Home path="/" />
+                <Paste path="/:uuid" />
+            </Router>
+        </div>
     );
 }
