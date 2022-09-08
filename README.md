@@ -38,6 +38,5 @@ paste-server start -v --spa-dir="./build"
 
 ## TODO
 
-- Have update not send when no changes made (expiresIn issue)
 - Make look and feel better
 - Add syntax highlighting with highlight.js
