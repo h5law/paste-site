@@ -4,6 +4,8 @@ import { getPaste, updatePaste, deletePaste } from '../api.js';
 import { mapLangName } from '../utils.js'
 
 function EditOptions(props) {
+    const [expiresIn, setExpiresIn] = useState(14);
+
     function handleSelChange(e) {
       e.preventDefault();
       props.sft(e.target.value);
@@ -11,6 +13,7 @@ function EditOptions(props) {
 
     function handleSliChange(e) {
         e.preventDefault();
+        setExpiresIn(e.target.value);
         props.sei(e.target.value);
     }
 
@@ -37,10 +40,10 @@ function EditOptions(props) {
             <div id="ei-number-container">
                 <label for="ei-number">Expires In: </label>
                 <input type="range" id="ei-number" name="expires-in"
-                       min="1" max="30" value={props.ei} onChange={handleSliChange}
+                       min="1" max="30" value={expiresIn} onChange={handleSliChange}
                        disabled={!props.es} />
                 <p><span id="days-label">
-                    {props.ei} day{props.ei > 1 ? "s" : ""}
+                    {expiresIn} day{expiresIn > 1 ? "s" : ""}
                 </span></p>
             </div>
             <div id="edit-container">
@@ -260,7 +263,7 @@ export default function Paste(props) {
         const [editState, setEditState] = useState(false);
         const [content, setContent] = useState(resp.content);
         const [filetype, setFiletype] = useState(resp.filetype);
-        const [expiresIn, setExpiresIn] = useState(14);
+        const [expiresIn, setExpiresIn] = useState(0);
         const [accessKey, setAccessKey] = useState("");
         const [err, setErr] = useState({});
 
