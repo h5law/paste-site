@@ -45,12 +45,14 @@ export async function updatePaste(url, uuid, content, filetype, expiresIn, acces
     if (filetype !== null) {
         bodyObj["filetype"] = filetype;
     }
+    if (expiresIn !== 0) {
+        bodyObj["expiresIn"] = Number(expiresIn);
+    }
     try {
         const response = await fetch(endpoint, {
             method: "PUT",
             body: JSON.stringify({
                 ...bodyObj,
-                "expiresIn": Number(expiresIn),
                 "accessKey": accessKey,
             }),
             headers: {
